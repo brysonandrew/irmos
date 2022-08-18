@@ -6,10 +6,9 @@ import { TState } from "./types";
 const config: TNeuBoxConfig = {
   size: 4,
   blur: 2,
-  contrast: 8,
-  hue: 10,
-  saturation: 60,
-  lightness: 40,
+  hue: 0,
+  saturation: 0,
+  lightness: 0,
 };
 const style = neuStyle(config);
 export const INIT_STATE: TState = {

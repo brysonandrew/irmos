@@ -49,6 +49,7 @@ export const reducer = (
       return {
         ...state,
         active: value,
+        loading: {},
       };
     }
     case "ready": {

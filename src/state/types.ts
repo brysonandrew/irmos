@@ -18,7 +18,7 @@ export type TState = {
   style: TNeuStyleReturn;
   config: TNeuBoxConfig;
   active: Partial<
-    Record<TActiveKey, boolean | string>
+    Record<TActiveKey, boolean | any>
   >;
   loading: Partial<
     Record<
@@ -57,6 +57,8 @@ export type TReducerAction =
 
 export const LOADABLE = [
   "None",
+  "Calling",
+  "Answering",
 ] as const;
 export type TLoadableKey =
   typeof LOADABLE[number];
@@ -64,6 +66,7 @@ export type TLoadableKey =
 export const ACTIVE = [
   "None",
   "Menu",
+  "Calling"
 ] as const;
 export type TActiveKey =
   typeof ACTIVE[number];
