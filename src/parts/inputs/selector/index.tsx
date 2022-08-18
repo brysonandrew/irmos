@@ -1,46 +1,62 @@
 import {
   AnimatePresence,
   motion,
-  useAnimationControls,
   useMotionValue,
 } from "framer-motion";
 import {
-  FC,
   PointerEvent as TPointerEvent,
   useRef,
 } from "react";
-
 import styled from "@emotion/styled";
 import { Menu } from "./Menu";
 import { Selectable } from "../../../text/Selectable";
 import { useState } from "react";
 import useMeasure from "react-use-measure";
+import {
+  columnCenter,
+  icon,
+} from "../../../styles/decorators";
+import { TNeuKey } from "../../../utils/neumorphism";
+import { ICON_SIZE } from "../../../config/constants";
+import { useContext } from "../../../state/Context";
 
 const Root = styled(motion.div)`
-  width: 100%;
+  ${columnCenter}
+  height: ${ICON_SIZE}px;
+`;
+
+const Label = styled(motion.div)`
+  top: -28px;
+  text-transform: uppercase;
 `;
 
 const Selected = styled(motion.div)`
-  height: 100%;
+  height: ${ICON_SIZE}px;
   width: 100%;
 `;
 
-const Hoverable = styled(motion.div)``;
+const Hoverable = styled(motion.div)`
+  height: ${ICON_SIZE}px;
+  width: 100%;
+`;
 
 export type TSelectorProps<T> = {
   disabled?: boolean;
-  value: string;
+  value: T;
   options: readonly T[];
-  onSelect(value: string): void;
+  onSelect(value: T): void;
+  children: TNeuKey;
 };
 export const Selector = <
-  T extends string
+  T extends number | string
 >({
   disabled,
   value,
   options,
   onSelect,
+  children,
 }: TSelectorProps<T>) => {
+  const { style } = useContext();
   const idleRef = useRef(false);
   const [isHover, setIsHover] =
     useState(false);
@@ -61,17 +77,11 @@ export const Selector = <
       ) * 4
     );
   };
-
   const variant = disabled
     ? "disabled"
     : "animate";
 
-  const handleSelect = (
-    value: string
-  ) => {
-    setIsHover(false);
-    idleRef.current = true;
-    resetMousePosition();
+  const handleSelect = (value: T) => {
     onSelect(value);
   };
   const handleHoverStart = () => {
@@ -84,6 +94,11 @@ export const Selector = <
     idleRef.current = false;
     setIsHover(false);
   };
+  const handleToggle = () => {
+    setIsHover(!isHover);
+    idleRef.current = !idleRef.current;
+    resetMousePosition();
+  };
   return (
     <Root
       style={{
@@ -93,9 +108,11 @@ export const Selector = <
       }}
       initial={false}
       animate={variant}
-      className="relative"
+      className="relative flex-1 mx-4"
       variants={{
         animate: {
+          ...style.FlatSunken,
+          ...style.common,
           filter: "brightness(100%)",
         },
         disabled: {
@@ -103,24 +120,26 @@ export const Selector = <
         },
       }}
     >
+      <Label className="absolute text-xs">
+        {children}
+      </Label>
       <Selected>
         <Selectable>{value}</Selectable>
       </Selected>
       <Hoverable
-        className="absolute top-0 left-0 w-full"
+        className="absolute top-0 left-0"
         animate={{
-          height: isHover ? 200 : 80,
+          height: isHover
+            ? ICON_SIZE * 2
+            : ICON_SIZE,
         }}
         transition={{
           duration: 4,
           delay: 0.5,
         }}
         ref={ref}
-        {...{
-          onHoverEnd: handleHoverEnd,
-          onHoverStart:
-            handleHoverStart,
-        }}
+        onHoverStart={handleHoverStart}
+        onHoverEnd={handleHoverEnd}
         onPointerMove={
           handlePointerMove
         }
@@ -131,7 +150,7 @@ export const Selector = <
             options.length > 0 &&
             isHover && (
               <motion.div
-                style={{ y: "-50%" }}
+                style={{ y: "-10%" }}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
@@ -139,6 +158,9 @@ export const Selector = <
                 <Menu<T>
                   mouseY={mouseY}
                   options={options}
+                  onToggle={
+                    handleToggle
+                  }
                   onSelect={
                     handleSelect
                   }

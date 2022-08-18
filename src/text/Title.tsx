@@ -1,16 +1,23 @@
+import type { FC } from "react";
 import styled from "@emotion/styled";
+import {
+  motion,
+  MotionProps,
+} from "framer-motion";
 import { modularScale } from "polished";
-import { FC } from "react";
 
-const Root = styled.h1`
+const Root = styled(motion.h1)`
   position: relative;
   text-transform: uppercase;
-  font-size: ${modularScale(2.8)};
+  font-size: ${modularScale(1.8)};
 `;
 
 type TProps = {
   children: string;
-};
+} & MotionProps;
 export const Title: FC<TProps> = ({
   children,
-}) => <Root>{children}</Root>;
+  ...props
+}) => (
+  <Root {...props}>{children}</Root>
+);

@@ -3,14 +3,13 @@ import {
   MotionValue,
 } from "framer-motion";
 import styled from "@emotion/styled";
-import { columnStart } from "../../../styles/decorators";
+import { columnCenter } from "../../../styles/decorators";
 import { Selectable } from "../../../text/Selectable";
-import { MAX_HEIGHT } from "../../../config/constants";
 
 const Root = styled(motion.div)``;
 
 const List = styled(motion.ul)`
-  ${columnStart} /* max-height: ${MAX_HEIGHT}px; */
+  ${columnCenter};
   backdrop-filter: blur(16px)
     saturate(180%);
   background-color: rgba(
@@ -29,64 +28,70 @@ const Button = styled(motion.button)`
 type TProps<T> = {
   mouseY: MotionValue;
   options: readonly T[];
-  onSelect(option: string): void;
+  onToggle(): void;
+  onSelect(option: T): void;
 };
-export const Menu = <T extends string>({
+export const Menu = <
+  T extends string | number
+>({
   options,
+  onToggle,
   onSelect,
   mouseY,
 }: TProps<T>) => {
   return (
-    <>
-      <Root
-        style={{
-          y: mouseY,
-        }}
-      >
-        <List className="relative border-2 border-black-666 py-6">
-          {options.map((option: T) => (
-            <Item
-              key={option}
-              className="px-6"
+    <Root
+      style={{
+        y: mouseY,
+      }}
+    >
+      <List className="relative border-2 py-2">
+        {options.map((option: T) => (
+          <Item
+            key={option}
+            className="w-full"
+          >
+            <Button
+              className="z-20 w-full"
+              initial={false}
+              animate="animate"
+              whileHover="hover"
+              variants={{
+                animate: {
+                  backgroundColor:
+                    "rgba(0,0,0,0)",
+                },
+                hover: {
+                  backgroundColor:
+                    "rgba(111,111,111,0.8)",
+                },
+              }}
+              onTap={() => {
+                onToggle();
+                onSelect(option);
+              }}
+              onHoverEnd={() =>
+                onSelect(option)
+              }
             >
-              <Button
-                className="z-20"
-                initial={false}
-                animate="animate"
-                whileHover="hover"
+              <Selectable
                 variants={{
                   animate: {
-                    backgroundColor:
-                      "rgba(0,0,0,0)",
-                  },
-                  hover: {
-                    backgroundColor:
+                    color:
                       "rgba(111,111,111,0.8)",
                   },
+                  hover: {
+                    color:
+                      "rgba(0,0,0,1)",
+                  },
                 }}
-                onTap={() =>
-                  onSelect(option)
-                }
               >
-                <Selectable
-                  variants={{
-                    animate: {
-                      color:
-                        "rgba(111,111,111,0.8)",
-                    },
-                    hover: {
-                      color:
-                        "rgba(0,0,0,1)",
-                    },
-                  }}
-                >
-                  {option}
-                </Selectable>
-              </Button>
-            </Item>
-          ))}
-        </List>
-      </Root>
-    </>
+                {option}
+              </Selectable>
+            </Button>
+          </Item>
+        ))}
+      </List>
+    </Root>
   );
 };

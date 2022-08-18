@@ -1,9 +1,16 @@
 import { css } from "@emotion/react";
+import { ICON_SIZE } from "../config/constants";
 
 export const rowCenter = css`
   display: flex;
   align-items: center;
   justify-content: center;
+`;
+
+export const icon = css`
+  ${rowCenter}
+  width: ${ICON_SIZE}px;
+  height: ${ICON_SIZE}px;
 `;
 
 export const rowGap = css`

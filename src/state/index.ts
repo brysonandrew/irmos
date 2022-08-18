@@ -1,21 +1,35 @@
-import { setMaxListeners } from "stream";
+import { neuStyle } from "../utils/neumorphism";
 import { INIT_STATE } from "./constants";
 import {
   TState,
   TReducerAction,
-} from "./type";
-
-export const resolveInitState = (
+} from "./types";
+export const resolveHydrationState = (
   state: TState,
-  savedState: TState
+  savedState?: TState
 ): TState => {
-  const appState =
+  const baseState =
     savedState ?? INIT_STATE;
+  const { config, style, ...appState } =
+    baseState;
   return {
     ...state,
     ...appState,
   };
 };
+export const resolvePostHydrationState =
+  (
+    state: TState,
+    savedState?: TState
+  ): TState => {
+    const baseState =
+      savedState ?? INIT_STATE;
+    const { ...appState } = baseState;
+    return {
+      ...state,
+      ...appState,
+    };
+  };
 
 export const reducer = (
   state: TState,
@@ -25,92 +39,34 @@ export const reducer = (
     case "state": {
       return { ...state, ...value };
     }
-    case "results": {
-      return {
-        ...state,
-        results: value,
-      };
-    }
     case "loading": {
       return {
         ...state,
         loading: value,
-        ...(value === "Results"
-          ? { lastSearch: state.search }
-          : {}),
       };
     }
-    case "categoryMap": {
+    case "active": {
       return {
         ...state,
-        categoryMap: value,
-        providers: Object.keys(value),
-        loading: {
-          ...state.loading,
-          Providers: false,
-        },
-      };
-    }
-    case "category": {
-      return {
-        ...state,
-        category: value,
-      };
-    }
-    case "targets": {
-      const categories = state.provider
-        ? value.categoryMap[
-            state.provider
-          ] ?? []
-        : [];
-      return {
-        ...state,
-        targets: value.results,
-        sources: state.sources.filter(
-          (v) =>
-            !value.results.includes(v)
-        ),
-        categoryMap: value.categoryMap,
-        categories,
-        category: categories[0],
-        loading: {
-          ...state.loading,
-          Activate: false,
-        },
-      };
-    }
-    case "provider": {
-      const categories =
-        state.categoryMap[value] ?? [];
-      return {
-        ...state,
-        provider: value,
-        categories,
-        category: categories[0] ?? null,
-      };
-    }
-    case "search": {
-      return {
-        ...state,
-        search: value,
-      };
-    }
-    case "limit": {
-      return {
-        ...state,
-        limit: value,
+        active: value,
       };
     }
     case "ready": {
       return {
         ...state,
+        ...value,
         ready: true,
       };
     }
-    case "search": {
+    case "config": {
+      const config = {
+        ...state.config,
+        ...value,
+      };
       return {
         ...state,
-        search: value,
+        config,
+        style: neuStyle(config),
       };
     }
     default: {

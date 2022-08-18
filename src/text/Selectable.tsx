@@ -3,25 +3,27 @@ import {
   motion,
   MotionProps,
 } from "framer-motion";
-import { FC } from "react";
-import { MAX_WIDTH_5 } from "../config/constants";
 import { useContext } from "../state/Context";
+import { columnCenter } from "../styles/decorators";
 
 const Root = styled(motion.p)`
-  width: ${MAX_WIDTH_5}px;
+  ${columnCenter}
+  height: 100%;
 `;
 
-type TProps = {
-  children: string;
+type TProps<T> = {
+  children: T;
 } & MotionProps;
-export const Selectable: FC<TProps> = ({
+export const Selectable = <
+  T extends string | number
+>({
   children,
   ...props
-}) => {
+}: TProps<T>) => {
   const { ready } = useContext();
   return (
     <Root
-      className="py-6 px-10 text-2xl truncate text-left"
+      className="text-sm truncate text-left"
       {...props}
     >
       {ready && children}

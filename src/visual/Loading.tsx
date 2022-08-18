@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { motion } from "framer-motion";
 import { centerChildren } from "../styles/decorators";
-import { Logo } from "./Icon";
+import { Logo } from "./Logo";
 
 const Root = styled.div`
   ${centerChildren}

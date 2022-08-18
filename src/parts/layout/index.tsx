@@ -1,39 +1,41 @@
+import { motion } from "framer-motion";
 import styled from "@emotion/styled";
-import React, { FC } from "react";
+import type { FC } from "react";
 import {
-  HALF_SCROLL_BUFFER,
+  FOOTER_HEIGHT,
   HEADER_HEIGHT,
 } from "../../config/constants";
-import { Header } from "./Header";
+import { useContext } from "../../state/Context";
+import { Header } from "./header";
+import { Footer } from "./Footer";
 
-const Root = styled.div`
-  position: relative;
+const Root = styled(motion.div)``;
+
+const Container = styled.div`
   min-height: calc(
-    100vh + ${HALF_SCROLL_BUFFER}px
+    100vh - ${FOOTER_HEIGHT}px
   );
 `;
 
-const Container = styled.div`
-  position: relative;
-  top: ${HEADER_HEIGHT}px;
-`;
-
 type TProps = {
-  isResults: boolean;
-  children: JSX.Element[];
+  children: JSX.Element | JSX.Element[];
 };
 export const Layout: FC<TProps> = ({
-  isResults,
   children,
-}) => (
-  <Root
-    className={`flex flex-col ${
-      isResults ? "--results" : ""
-    }`}
-  >
-    <Header />
-    <Container className="relative flex-grow container mx-auto">
-      {children}
-    </Container>
-  </Root>
-);
+}) => {
+  const { style } = useContext();
+
+  return (
+    <Root
+      className="relative flex flex-col px-4"
+      initial={false}
+      animate={style.common}
+    >
+      <Container className="relative container mx-auto">
+        <Header />
+        {children}
+      </Container>
+      <Footer />
+    </Root>
+  );
+};

@@ -6,7 +6,7 @@ import type { Context as ReactContext } from "react";
 import {
   TAction,
   TContext,
-} from "./type";
+} from "./types";
 import { INIT_STATE } from "./constants";
 
 export const Context: ReactContext<TContext> =

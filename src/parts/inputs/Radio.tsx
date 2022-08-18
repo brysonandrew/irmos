@@ -87,7 +87,7 @@ export const Radio: FC<TProps> = ({
                           color: "#222",
                         }
                       : {
-                          color: "currentColor",
+                          color: "#444",
                         }
                     : {
                         color:

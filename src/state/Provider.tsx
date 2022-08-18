@@ -4,23 +4,19 @@ import {
   useRef,
 } from "react";
 import type { FC } from "react";
-import {
-  CONFIG_1337x,
-  _STATE_STORAGE_KEY,
-} from "../config/constants";
+import { _STATE_STORAGE_KEY } from "../config/constants";
 import { Context } from "./Context";
 import {
   reducer,
-  resolveInitState,
+  resolveHydrationState,
+  resolvePostHydrationState,
 } from ".";
 import { useLocalStorage } from "../utils/storage";
 import {
   TState,
   TReducer,
-  TKeyValuePair,
-} from "./type";
+} from "./types";
 import { INIT_STATE } from "./constants";
-import { useOverride } from "../parts/search/useOverride";
 
 type TProviderProps = {
   children: JSX.Element | JSX.Element[];
@@ -43,6 +39,7 @@ export const Provider: FC<
       );
       setSavedState({
         ...nextState,
+        active: {},
         loading: {},
         ready: false,
       });
@@ -50,21 +47,22 @@ export const Provider: FC<
     },
     INIT_STATE,
     (state) =>
-      resolveInitState(
+      resolveHydrationState(
         state,
         savedState
       )
   );
-  const init = useOverride();
-  const initRef = useRef(init);
-  useEffect(() => {
-    initRef.current({
-      provider: "1337x",
-      config: JSON.stringify(
-        CONFIG_1337x
+  const readyRef = useRef(() =>
+    dispatch({
+      type: "ready",
+      value: resolvePostHydrationState(
+        state,
+        savedState
       ),
-    });
-    dispatch({ type: "ready" });
+    })
+  );
+  useEffect(() => {
+    readyRef.current();
   }, []);
   return (
     <Context.Provider

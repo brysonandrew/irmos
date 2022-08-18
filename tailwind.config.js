@@ -46,38 +46,5 @@ module.exports = {
   ],
   theme: {
     extend: {},
-    colors: {
-      black: {
-        "000": "#000",
-        111: "#111",
-        222: "#222",
-        333: "#333",
-        444: "#444",
-        555: "#555",
-        666: "#666",
-        777: "#777",
-        888: "#888",
-        999: "#999",
-        aaa: "#aaa",
-      },
-    },
-    neumorphismColor: {
-      black: {
-        100: "#000",
-        200: "#111",
-        300: "#222",
-        400: "#333",
-      },
-    },
-    neumorphismSize: {
-      xs: "0.05em",
-      sm: "0.08em",
-      default: "0.2em",
-      lg: "0.4em",
-      xl: "0.8em",
-    },
-  },
-  plugins: [
-    require("tailwindcss-neumorphism"),
-  ],
+  }
 };

@@ -4,38 +4,29 @@ import type {
   ReducerState,
   ReducerAction,
 } from "react";
-import { TProviderKey } from "../config/constants";
-import { T1337x } from "../types/results";
+import {
+  TNeuBoxConfig,
+  TNeuStyleReturn,
+} from "../utils/neumorphism";
 import { INIT_STATE } from "./constants";
 
 export type TContext = TState & {
   dispatch: TDispatch;
 };
 
-export type TResult = T1337x; // | any;
-export type TResults =
-  | readonly T1337x[]
-  | readonly any[];
-
 export type TState = {
+  style: TNeuStyleReturn;
+  config: TNeuBoxConfig;
+  active: Partial<
+    Record<TActiveKey, boolean | string>
+  >;
   loading: Partial<
     Record<
       TLoadableKey,
       boolean | string
     >
   >;
-  search: string | null;
-  lastSearch: string | null;
-  results: TResults;
-  categoryMap: Record<string, string[]>;
-  categories: string[];
-  category: string | null;
-  provider: TProviderKey | null;
-  providers: readonly TProviderKey[];
-  targets: readonly TProviderKey[];
-  sources: readonly TProviderKey[];
   ready: boolean;
-  limit: number;
 };
 
 export type TActionType =
@@ -65,13 +56,14 @@ export type TReducerAction =
   ReducerAction<TReducer>;
 
 export const LOADABLE = [
-  "Results",
-  "Providers",
-  "Activate",
-  "Detail",
-  "Download",
-  "Magnet",
-  "Override",
+  "None",
 ] as const;
 export type TLoadableKey =
   typeof LOADABLE[number];
+
+export const ACTIVE = [
+  "None",
+  "Menu",
+] as const;
+export type TActiveKey =
+  typeof ACTIVE[number];
