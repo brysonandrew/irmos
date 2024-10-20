@@ -27,7 +27,7 @@ export const Layout: FC<TProps> = ({
 
   return (
     <Root
-      className="relative flex flex-col px-4"
+      className="relative flex flex-col"
       initial={false}
       animate={style.common}
     >

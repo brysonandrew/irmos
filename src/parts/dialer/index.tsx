@@ -31,7 +31,7 @@ export const Dialer = () => {
   const dial = useDial();
   return (
     <Root
-      className="flex items-start p-4"
+      className="flex items-start"
       initial={false}
       animate={{
         ...style.FlatSunken,
@@ -90,20 +90,16 @@ export const Dialer = () => {
           style={{ scale: 1 }}
           variants={{
             animate: {
-              filter: "brightness(60%)",
+              scale: 1,
             },
             hover: {
-              scale: 1.1,
-              filter:
-                "brightness(100%)",
+              scale: 1.04,
             },
             tap: {
-              filter:
-                "brightness(110%)",
+              scale: 1.02,
             },
             loading: {
-              filter:
-                "brightness(120%)",
+              scale: 1,
             },
           }}
           className="flex flex-col items-center justify-center absolute inset-1.5 border-r-2"

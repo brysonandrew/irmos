@@ -6,7 +6,7 @@ import { MotionConfig } from "framer-motion";
 
 const App = () => (
   <Provider>
-    <MotionConfig transition={{ ease: "linear", duration: 0.4 }}>
+    <MotionConfig transition={{ ease: "linear", duration: 0.2 }}>
       <Head>
         <title>
           {packageJson.name[0].toUpperCase() + packageJson.name.slice(1)}
